@@ -1,13 +1,26 @@
+'use client'
 import Image from 'next/image'
 import styles from './page.module.css'
+import React from "react";
+import { useAuthContext } from "@context/AuthContext";
+import { useRouter } from "next/navigation";
+import Navbar from 'components/navbar'
 
 export default function Home() {
+  const { user } = useAuthContext()
+  const router = useRouter()
+
+  React.useEffect(() => {
+      if (user == null) router.push("/signin")
+  }, [user])
+
   return (
     <main className={styles.main}>
+    <Navbar/>
       <div className={styles.description}>
         <p>
           Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
+          <code className={styles.code}>app/page.js</code>
         </p>
         <div>
           <a
@@ -41,7 +54,7 @@ export default function Home() {
 
       <div className={styles.grid}>
         <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
           className={styles.card}
           target="_blank"
           rel="noopener noreferrer"
