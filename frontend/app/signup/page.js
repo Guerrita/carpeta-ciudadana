@@ -4,6 +4,10 @@ import signUp from "@firebase/auth/signup"
 import { useRouter } from 'next/navigation'
 import axios from 'axios';
 
+import { getAuth } from 'firebase/auth';
+import firebase_app from '@firebase/config';
+
+const auth = getAuth(firebase_app);
 
 const strengthLabels = ["Invalid", "Medium", "strong"];
 
@@ -14,19 +18,51 @@ function Page() {
     const [password, setPassword] = React.useState('')
     const [strength, setStrength] = React.useState("");
     const router = useRouter()
-    
+
     const [api, setApi] = React.useState('http://169.51.195.62:30174/apis/validateCitizen/')
 
-    const handleForm = async (event) => {
+    const registerUser = async (event) => {
 
-        event.preventDefault()
-        const { result, error } = await signUp(email, password);
-        if (error) {
-            return console.log(error)
+        const response = await axios.get(api + document, {
+            headers: {
+                'Access-Control-Allow-Origin': 'http://localhost:3000'
+            }
+        })
+        if (response.status === 200) {
+            console.log(response.data)
+            // event.preventDefault()
+            // const { result, error } = await signUp(email, password);
+            // if (error) {
+            //     switch (error.code) {
+            //         case 'auth/email-already-in-use':
+            //             console.log(`Email address ${email} already in use.`);
+            //             return;
+            //         case 'auth/invalid-email':
+            //             console.log(`Email address ${email} is invalid.`);
+            //             return;
+            //         case 'auth/operation-not-allowed':
+            //             console.log(`Error during sign up.`);
+            //             return;
+            //         case 'auth/weak-password':
+            //             console.log('Password is not strong enough. Add additional characters including special characters and numbers.');
+            //             return;
+            //         default:
+            //             console.log(error.message);
+            //             return;
+            //     }
+            // }
+            // // //else successful
+            // console.log(result)
+            // return router.push("/")
+        } else {
+            console.log(response.data)
         }
-        //else successful
-        console.log(result)
-        return router.push("/")
+
+        //The email is not registered
+
+
+
+
     }
 
     const getStrength = (password) => {
@@ -53,7 +89,7 @@ function Page() {
     return (<div className="smash">
         <div className="">
             <h1 className="">Sign up</h1>
-            <form onSubmit={handleForm} className="aureole one smosh">
+            <div className="aureole one smosh">
 
 
                 <label htmlFor="name">Nombre
@@ -74,8 +110,8 @@ function Page() {
 
                 </div>
                 <span className="strength ">{strength && <>{strength} password</>}</span>
-                <button type="submit" className="button-fill">Sign up</button>
-            </form>
+                <button onClick={registerUser} className="button-fill">Sign up</button>
+            </div>
         </div>
     </div>);
 }
