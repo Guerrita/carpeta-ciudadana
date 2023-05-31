@@ -278,6 +278,16 @@ div[data-type="static_image"] img {
   background-color: #218838;
 }
 
+.document .delete-button {
+  display: block;
+  margin-top: 10px;
+  text-decoration: none;
+  background-color: #dc3545;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
 .object-container {
   position: relative;
   width: 100%;

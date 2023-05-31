@@ -68,6 +68,7 @@ export default function Home() {
 
   return (
     <div className="container">
+      <Navbar />
       {files.map((file, index) => (
         <div className="document" key={index}>
           <p className="file-name">{file.name}</p>
@@ -77,6 +78,7 @@ export default function Home() {
           </a>
 
           <a className="validate-button">Validar</a>
+          <a className="delete-button">Eliminar</a>
         </div>
       ))}
       {/* Resto del código... */}
