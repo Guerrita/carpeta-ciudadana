@@ -28,33 +28,34 @@ function Page() {
                 'Access-Control-Allow-Origin': 'http://localhost:3000'
             }
         })
-        if (response.status === 200) {
+        if (response.status === 204) {
+            //204 No content
             console.log(response.data)
-            // event.preventDefault()
-            // const { result, error } = await signUp(email, password);
-            // if (error) {
-            //     switch (error.code) {
-            //         case 'auth/email-already-in-use':
-            //             console.log(`Email address ${email} already in use.`);
-            //             return;
-            //         case 'auth/invalid-email':
-            //             console.log(`Email address ${email} is invalid.`);
-            //             return;
-            //         case 'auth/operation-not-allowed':
-            //             console.log(`Error during sign up.`);
-            //             return;
-            //         case 'auth/weak-password':
-            //             console.log('Password is not strong enough. Add additional characters including special characters and numbers.');
-            //             return;
-            //         default:
-            //             console.log(error.message);
-            //             return;
-            //     }
-            // }
-            // // //else successful
-            // console.log(result)
-            // return router.push("/")
-        } else {
+            event.preventDefault()
+            const { result, error } = await signUp(email, password);
+            if (error) {
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        console.log(`Email address ${email} already in use.`);
+                        return;
+                    case 'auth/invalid-email':
+                        console.log(`Email address ${email} is invalid.`);
+                        return;
+                    case 'auth/operation-not-allowed':
+                        console.log(`Error during sign up.`);
+                        return;
+                    case 'auth/weak-password':
+                        console.log('Password is not strong enough. Add additional characters including special characters and numbers.');
+                        return;
+                    default:
+                        console.log(error.message);
+                        return;
+                }
+            }
+            // //else successful
+            console.log(result)
+            return router.push("/")
+        } else if (response.status === 200){
             console.log(response.data)
         }
 
