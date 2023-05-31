@@ -2,6 +2,7 @@
 import React from "react";
 import signIn from "../firebase/auth/signin";
 import { useRouter } from 'next/navigation'
+import Link from "next/link";
 
 function Page() {
     const [email, setEmail] = React.useState('')
@@ -10,7 +11,7 @@ function Page() {
 
     const handleForm = async (event) => {
         event.preventDefault()
-        if (password.length < 6){
+        if (password.length < 6) {
             alert("Invalid password")
         }
 
@@ -19,27 +20,30 @@ function Page() {
         if (error) {
             console.log(error)
             alert("Invalid password")
-            return 
+            return
         }
 
-        // else successful
-        console.log(result)
-        return router.push("/")
+        if (result) {
+            // else successful
+            console.log(result)
+            return router.push("/")
+        }
     }
-    return (<div className="">
-        <div className="">
-            <h1 className="">Sign in</h1>
-            <form onSubmit={handleForm} className="form">
+    return (<div className="smash">
+        <div className="auth-card">
+            <h1 className="mb13">Inicia sesión</h1>
+            <form onSubmit={handleForm} className="aureole one auth-form mt13">
                 <label htmlFor="email">
-                    <p>Email</p>
-                    <input onChange={(e) => setEmail(e.target.value)} required type="email" name="email" id="email" placeholder="example@mail.com" />
+                    Email
                 </label>
+                <input className="control" onChange={(e) => setEmail(e.target.value)} required type="email" name="email" id="email" placeholder="ejemplo@correo.com" />
                 <label htmlFor="password">
-                    <p>Password</p>
-                    <input onChange={(e) => setPassword(e.target.value)} required type="password" name="password" id="password" placeholder="password" />
+                    Contraseña
                 </label>
-                <button type="submit">Sign in</button>
+                <input  className="control" onChange={(e) => setPassword(e.target.value)} required type="password" name="password" id="password" placeholder="contraseña" />
+                <button type="submit" className="control">Iniciar sesión</button>
             </form>
+            <p>¿Aún no tienes cuenta? <Link href="/signup">Regístrate</Link></p>
         </div>
 
     </div>);

@@ -2,7 +2,7 @@
   --aura: 13px;
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
+  --font-mono: "Euclid Circular A",ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
 
@@ -84,6 +84,8 @@ html {
   margin: 0;
   padding: 0;
   color: black;
+  background: #f2f3ff;
+  font-family: "Euclid Circular A";
 }
 body {
   margin: 0;
@@ -96,13 +98,17 @@ body {
 
 
 a {
-  color: inherit;
+  color: #454a8f;;
   text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+  transition: all 0.8s;
 }
 
 input{
-  height: calc(var(--aura)*3);
-  border-radius: calc(var(--aura)/3);
+  height: calc(var(--aura) * 3);
+  border-radius: calc(var(--aura) / 3);
   padding: var(--aura);
 }
 
@@ -222,11 +228,137 @@ div[data-type="static_image"] img {
   outline: var(--aura-outline);
 }
 .button-fill {
-  border-color: blue;
+  border-color: #454a8f;
   color: white;
-  background-color: blue;
+  height: 56px;
+  padding: 0 16px;
+  background: #454a8f;
+  color: #f7f7f7;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
 }
 .button-fill:hover:not(:disabled) {
   background-color: aliceblue;
   color: black;
+}
+
+.strength {
+  text-align: left;
+  height: 30px;
+  text-transform: capitalize;
+}
+
+.bars {
+  margin: 8px 0;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 6px;
+  border-radius: 3px;
+  background: #dfe1f0;
+}
+
+.bars div {
+  height: 6px;
+  border-radius: 3px;
+  transition: 0.4s;
+  width: 0%;
+}
+
+.bars.Invalid div {
+  background: #e24c71;
+  width: 33.33%;
+}
+
+.strength.Invalid {
+  color: #e24c71;
+}
+.bars.Medium div {
+  background: #f39845;
+  width: 66.66%;
+}
+.strength.Medium {
+  color:  #f39845;
+}
+
+.strength.Strong {
+  color:  #57c558;
+}
+.bars.Strong div {
+  background: #57c558;
+  width: 100%;
+}
+
+button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.control {
+  border: 1.5px solid #dfe1f0;
+  outline: none;
+  width: 100%;
+  height: 56px;
+  padding: 0 16px;
+  background: #f6f7ff;
+  color: inherit;
+  border-radius: 6px;
+  margin: 8px 0;
+  font-family: inherit;
+  text-align: left;
+  font-size: 18px;
+  transition: 0.4s;
+}
+
+button.control {
+  cursor: pointer;
+  width: 100%;
+  height: 56px;
+  padding: 0 16px;
+  background: #454a8f;
+  color: #f7f7f7;
+  border: 0;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 2px;
+  transition: all 0.375s;
+}
+
+.auth-card {
+  width: 400px;
+  padding: 60px 30px 32px;
+  border-radius: 1.25rem;
+  background: #ffffff;
+  text-align: center;
+  transition: 0.4s;
+  margin: 20px auto;
+}
+
+.auth-card > h2 {
+  font-size: 36px;
+  font-weight: 600;
+  margin: 0 0 30px;
+}
+
+.auth-form {
+  width: 100%;
+  margin: 0;
+  display: grid;
+}
+
+.auth-form input.control::placeholder {
+  color: #9d9fbd;
+}
+
+.mt13{
+  margin-top: calc(var(--aura) * 2);
+}
+
+.mb13{
+  margin-bottom: calc(var(--aura) * 2);
 }
