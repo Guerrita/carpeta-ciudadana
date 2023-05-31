@@ -1,108 +1,79 @@
-'use client'
-import Image from 'next/image'
-import styles from './page.module.css'
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useAuthContext } from "@context/AuthContext";
 import { useRouter } from "next/navigation";
-import Navbar from 'components/navbar'
+import Navbar from "components/navbar";
+import firebase_app from "@firebase/config";
+import { getFirestore } from "firebase/firestore";
+import { ref, listAll, getDownloadURL } from "firebase/storage";
+import { storage } from "@firebase/config";
 
 export default function Home() {
-  const { user } = useAuthContext()
-  const router = useRouter()
+  const db = getFirestore(firebase_app);
+  const { user } = useAuthContext();
+  const router = useRouter();
+  const [files, setFiles] = useState([]);
+
+  const isImage = (fileName) => {
+    const imageExtensions = [".jpg", ".jpeg", ".png", ".gif"];
+    const extension = fileName
+      .substring(fileName.lastIndexOf("."))
+      .toLowerCase();
+    return imageExtensions.includes(extension);
+  };
+
+  const getPreviewComponent = (file) => {
+    if (isImage(file.name)) {
+      return <img src={file.url} alt={file.name} />;
+    } else {
+      return (
+        <iframe
+          src={file.url}
+          title={file.name}
+          style={{ width: "100%", height: "500px" }}
+        />
+      );
+    }
+  };
 
   React.useEffect(() => {
-      if (user == null) router.push("/signin")
-  }, [user])
+    const auth = getAuth();
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userId = user.uid;
+
+        // Obtener la lista de archivos del usuario desde Firebase Storage
+        const userFilesRef = ref(storage, `files/${userId}`);
+        const fileList = await listAll(userFilesRef);
+
+        const filesData = [];
+        for (const file of fileList.items) {
+          const downloadUrl = await getDownloadURL(file);
+          filesData.push({ name: file.name, url: downloadUrl });
+        }
+
+        setFiles(filesData);
+      }
+    });
+
+    if (user == null) router.push("/signin");
+  }, [user]);
 
   return (
-    <main className={styles.main}>
-    <Navbar/>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
+    <div className="container">
+      {/* Mostrar los archivos */}
+      {files.map((file, index) => (
+        <div key={index}>
+          <p>{file.name}</p>
+          {getPreviewComponent(file)}
+          <a href={file.url} download={file.name}>
+            Descargar
           </a>
         </div>
-      </div>
+      ))}
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+      {/* Resto del código... */}
+    </div>
+  );
 }
