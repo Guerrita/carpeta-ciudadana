@@ -25,14 +25,20 @@ export default function Home() {
 
   const getPreviewComponent = (file) => {
     if (isImage(file.name)) {
-      return <img src={file.url} alt={file.name} />;
+      return (
+        <div className="object-container">
+          <object data={file.url} type="image">
+            <img src={file.url} alt={file.name} />
+          </object>
+        </div>
+      );
     } else {
       return (
-        <iframe
-          src={file.url}
-          title={file.name}
-          style={{ width: "100%", height: "500px" }}
-        />
+        <div className="object-container">
+          <object data={file.url} type="application/pdf">
+            <p>La previsualización no está disponible</p>
+          </object>
+        </div>
       );
     }
   };
@@ -62,17 +68,17 @@ export default function Home() {
 
   return (
     <div className="container">
-      {/* Mostrar los archivos */}
       {files.map((file, index) => (
-        <div key={index}>
-          <p>{file.name}</p>
+        <div className="document" key={index}>
+          <p className="file-name">{file.name}</p>
           {getPreviewComponent(file)}
-          <a href={file.url} download={file.name}>
+          <a className="download-button" href={file.url} download={file.name}>
             Descargar
           </a>
+
+          <a className="validate-button">Validar</a>
         </div>
       ))}
-
       {/* Resto del código... */}
     </div>
   );
