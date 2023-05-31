@@ -330,7 +330,7 @@ button.control {
 }
 
 .auth-card {
-  width: 400px;
+  max-width: 400px;
   padding: 60px 30px 32px;
   border-radius: 1.25rem;
   background: #ffffff;
@@ -361,4 +361,30 @@ button.control {
 
 .mb13{
   margin-bottom: calc(var(--aura) * 2);
+}
+
+.modal {
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  text-align: center;
+  background-color: #fefefe;
+  padding: 50px;
+  border-radius: 10px;
+  border: 1px solid #888;
+  text-align: center;
+  height: 50%;
 }

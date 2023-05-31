@@ -4,22 +4,37 @@ import signIn from "../firebase/auth/signin";
 import { useRouter } from 'next/navigation'
 import Link from "next/link";
 
+import ModalMessage from '@components/ModalMessage';
+import Loader from '@components/Loader';
+
+
 function Page() {
+    const [showModal, setShowModal] = React.useState(false);
+    const [modalMessage, setModalMessage] = React.useState('');
+    const [isLoading, setIsLoading] = React.useState(false);
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
     const router = useRouter()
 
+    const openModal = (message) => {
+        setModalMessage(message);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
     const handleForm = async (event) => {
+        setIsLoading(true)
         event.preventDefault()
-        if (password.length < 6) {
-            alert("Invalid password")
-        }
 
         const { result, error } = await signIn(email, password);
+        
 
         if (error) {
-            console.log(error)
-            alert("Invalid password")
+            openModal("Cuenta o contraseña erroneas.");
+            setIsLoading(false)
             return
         }
 
@@ -30,9 +45,10 @@ function Page() {
         }
     }
     return (<div className="smash">
+    {isLoading ? <Loader /> :
         <div className="auth-card">
             <h1 className="mb13">Inicia sesión</h1>
-            <form onSubmit={handleForm} className="aureole one auth-form mt13">
+            <div className="aureole one auth-form mt13">
                 <label htmlFor="email">
                     Email
                 </label>
@@ -41,11 +57,14 @@ function Page() {
                     Contraseña
                 </label>
                 <input  className="control" onChange={(e) => setPassword(e.target.value)} required type="password" name="password" id="password" placeholder="contraseña" />
-                <button type="submit" className="control">Iniciar sesión</button>
-            </form>
+                <button onClick={e=>{handleForm(e)}} className="control">Iniciar sesión</button>
+            </div>
             <p>¿Aún no tienes cuenta? <Link href="/signup">Regístrate</Link></p>
         </div>
-
+    }
+    {showModal && (
+        <ModalMessage message={modalMessage} onClose={closeModal} />
+      )}
     </div>);
 }
 

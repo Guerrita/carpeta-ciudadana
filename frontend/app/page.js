@@ -4,18 +4,28 @@ import styles from './page.module.css'
 import React from "react";
 import { useAuthContext } from "@context/AuthContext";
 import { useRouter } from "next/navigation";
-import Navbar from 'components/navbar'
+
+import Navbar from '@components/NavBar'
+import Loader from '@components/Loader';
 
 export default function Home() {
+  const [isLoading, setIsLoading] = React.useState(true);
   const { user } = useAuthContext()
   const router = useRouter()
 
   React.useEffect(() => {
       if (user == null) router.push("/signin")
+      else{
+        setIsLoading(false)
+      }
   }, [user])
 
   return (
     <main className={styles.main}>
+    {isLoading ? <Loader /> :
+    <div>
+
+    
     <Navbar/>
       <div className={styles.description}>
         <p>
@@ -103,6 +113,8 @@ export default function Home() {
           </p>
         </a>
       </div>
+      </div>
+    }
     </main>
   )
 }
