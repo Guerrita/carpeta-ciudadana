@@ -28,7 +28,7 @@ export default function Home() {
       return (
         <div className="object-container">
           <object data={file.url} type="image">
-            <img src={file.url} alt={file.name} />
+            <img style={{ width: "100%" }} src={file.url} alt={file.name} />
           </object>
         </div>
       );
