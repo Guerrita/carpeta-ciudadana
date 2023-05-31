@@ -1,120 +1,87 @@
-'use client'
-import Image from 'next/image'
-import styles from './page.module.css'
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useAuthContext } from "@context/AuthContext";
 import { useRouter } from "next/navigation";
-
-import Navbar from '@components/NavBar'
-import Loader from '@components/Loader';
+import firebase_app from "@firebase/config";
+import { getFirestore } from "firebase/firestore";
+import { ref, listAll, getDownloadURL } from "firebase/storage";
+import { storage } from "@firebase/config";
+import Navbar from "@components/NavBar";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = React.useState(true);
-  const { user } = useAuthContext()
-  const router = useRouter()
+  const db = getFirestore(firebase_app);
+  const { user } = useAuthContext();
+  const router = useRouter();
+  const [files, setFiles] = useState([]);
+
+  const isImage = (fileName) => {
+    const imageExtensions = [".jpg", ".jpeg", ".png", ".gif"];
+    const extension = fileName
+      .substring(fileName.lastIndexOf("."))
+      .toLowerCase();
+    return imageExtensions.includes(extension);
+  };
+
+  const getPreviewComponent = (file) => {
+    if (isImage(file.name)) {
+      return (
+        <div className="object-container">
+          <object data={file.url} type="image">
+            <img style={{ width: "100%" }} src={file.url} alt={file.name} />
+          </object>
+        </div>
+      );
+    } else {
+      return (
+        <div className="object-container">
+          <object data={file.url} type="application/pdf">
+            <p>La previsualización no está disponible</p>
+          </object>
+        </div>
+      );
+    }
+  };
 
   React.useEffect(() => {
-      if (user == null) router.push("/signin")
-      else{
-        setIsLoading(false)
+    const auth = getAuth();
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userId = user.uid;
+
+        // Obtener la lista de archivos del usuario desde Firebase Storage
+        const userFilesRef = ref(storage, `files/${userId}`);
+        const fileList = await listAll(userFilesRef);
+
+        const filesData = [];
+        for (const file of fileList.items) {
+          const downloadUrl = await getDownloadURL(file);
+          filesData.push({ name: file.name, url: downloadUrl });
+        }
+
+        setFiles(filesData);
       }
-  }, [user])
+    });
+
+    if (user == null) router.push("/signin");
+  }, [user]);
 
   return (
-    <main className={styles.main}>
-    {isLoading ? <Loader /> :
-    <div>
-
-    
-    <Navbar/>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
+    <div className="container">
+      <Navbar />
+      {files.map((file, index) => (
+        <div className="document" key={index}>
+          <p className="file-name">{file.name}</p>
+          {getPreviewComponent(file)}
+          <a className="download-button" href={file.url} download={file.name}>
+            Descargar
           </a>
+
+          <a className="validate-button">Validar</a>
+          <a className="delete-button">Eliminar</a>
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-      </div>
-    }
-    </main>
-  )
+      ))}
+      {/* Resto del código... */}
+    </div>
+  );
 }
