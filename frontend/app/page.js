@@ -8,6 +8,8 @@ import { getFirestore } from "firebase/firestore";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
 import { storage } from "@firebase/config";
 import Navbar from "@components/NavBar";
+import FileUpload from "@components/FileUpload";
+import Image from "next/image";
 
 export default function Home() {
   const db = getFirestore(firebase_app);
@@ -28,7 +30,7 @@ export default function Home() {
       return (
         <div className="object-container">
           <object data={file.url} type="image">
-            <img style={{ width: "100%" }} src={file.url} alt={file.name} />
+            <Image src={file.url} alt={file.name} />
           </object>
         </div>
       );
@@ -69,8 +71,9 @@ export default function Home() {
   return (
     <main className="page-pancake smush">
       <Navbar />
+      <FileUpload/>
       <section >
-        <h2>Mis Archivos</h2>
+        <h2>Mis Documentos</h2>
       <section className="aureole two mt13">
         {files.map((file, index) => (
           <div className="document" key={index}>

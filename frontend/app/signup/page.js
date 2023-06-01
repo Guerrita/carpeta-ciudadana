@@ -163,7 +163,7 @@ function Page() {
                             <div></div>
                         </div>
                         <span className={`strength ${strength}`}>{strength && <>{strength} password</>}</span>
-                        <button onClick={e => { registerUser(e) }} className="control">Registrarse</button>
+                        <button onClick={e => { registerUser(e) }} className="button-fill">Registrarse</button>
                     </div>
                     <p>¿Ya tienes cuenta? <Link href="/signin">Inicia sesión</Link>
                     </p>

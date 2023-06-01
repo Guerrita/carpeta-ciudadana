@@ -57,7 +57,7 @@ function Page() {
                     Contraseña
                 </label>
                 <input  className="control" onChange={(e) => setPassword(e.target.value)} required type="password" name="password" id="password" placeholder="contraseña" />
-                <button onClick={e=>{handleForm(e)}} className="control">Iniciar sesión</button>
+                <button onClick={e=>{handleForm(e)}} className="button-fill">Iniciar sesión</button>
             </div>
             <p>¿Aún no tienes cuenta? <Link href="/signup">Regístrate</Link></p>
         </div>

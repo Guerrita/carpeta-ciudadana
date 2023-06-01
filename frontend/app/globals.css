@@ -187,10 +187,7 @@ div[data-type="static_image"] img {
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
-.button-fill,
-.button-pill,
-.button-link,
-.button-menu {
+.button-fill{
   cursor: pointer;
   box-sizing: border-box;
   margin: 0;
@@ -225,22 +222,40 @@ div[data-type="static_image"] img {
   transform: scale(0.97);
   outline: var(--aura-outline);
 }
-.button-fill {
-  border-color: #454a8f;
+.button-fill,
+input#file-upload-button {
+  border: 0;
   color: white;
+  width: 100%;
   height: 56px;
   padding: 0 16px;
   background: #454a8f;
   color: #f7f7f7;
   font-weight: 600;
-  text-align: center;
+  justify-content: center;
   cursor: pointer;
   border-radius: var(--aura);
+  font-size: 1rem;
+  margin-bottom: var(--aura);
 }
-.button-fill:hover:not(:disabled) {
-  background-color: aliceblue;
-  color: black;
+
+
+.control {
+  border: 1.5px solid #dfe1f0;
+  outline: none;
+  width: 100%;
+  height: 56px;
+  padding: 0 16px;
+  background: #f6f7ff;
+  color: inherit;
+  border-radius: 6px;
+  margin: 8px 0;
+  text-align: left;
+  font-size: 18px;
+  transition: 0.4s;
 }
+
+
 
 .strength {
   text-align: left;
@@ -288,44 +303,6 @@ div[data-type="static_image"] img {
 .bars.Strong div {
   background: #57c558;
   width: 100%;
-}
-
-button {
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-}
-
-.control {
-  border: 1.5px solid #dfe1f0;
-  outline: none;
-  width: 100%;
-  height: 56px;
-  padding: 0 16px;
-  background: #f6f7ff;
-  color: inherit;
-  border-radius: 6px;
-  margin: 8px 0;
-  font-family: inherit;
-  text-align: left;
-  font-size: 18px;
-  transition: 0.4s;
-}
-
-button.control {
-  cursor: pointer;
-  width: 100%;
-  height: 56px;
-  padding: 0 16px;
-  background: #454a8f;
-  color: #f7f7f7;
-  border: 0;
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: 2px;
-  transition: all 0.375s;
 }
 
 .auth-card {
@@ -503,3 +480,4 @@ button.control {
 .mauto{
   margin: 0 auto;
 }
+

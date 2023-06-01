@@ -21,7 +21,7 @@ export default function Navbar() {
   }
   return (
     <header className='mt13 mb13'>
-    <nav className='nav-list smash mauto'>
+    <nav className='nav-list mauto'>
 
       <Link href="/" passHref>
         <Image src="/carpeta.png" alt="carpeta" width={70} height={70} />

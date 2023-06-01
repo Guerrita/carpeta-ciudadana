@@ -5,7 +5,7 @@ import { ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-function Page() {
+export default function FileUpload() {
   const [imageUpload, setImageUpload] = useState(null);
   const [userFolder, setUserFolder] = useState("");
 
@@ -30,16 +30,25 @@ function Page() {
   };
 
   return (
-    <div className="container">
-      <input
-        type="file"
-        onChange={(event) => {
-          setImageUpload(event.target.files[0]);
-        }}
-      />
-      <button onClick={uploadImage}>Subir Documento</button>
-    </div>
+    <section>
+      <h2>Subida de documentos</h2>
+      <div className="aureole one smosh mt13 mb13">
+        <label className="button-fill" >
+          <input
+            style={{ display: 'none' }}
+            className="control"
+            type="file"
+            onChange={(event) => {
+              setImageUpload(event.target.files[0]);
+            }}
+
+          />
+          Seleccionar Documento
+        </label>
+
+        <button className="button-fill" onClick={uploadImage}>Subir Documento {imageUpload?.name}</button>
+      </div>
+    </section>
   );
 }
 
-export default Page;
