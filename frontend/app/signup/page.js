@@ -2,6 +2,7 @@
 import React from "react";
 import { useRouter } from 'next/navigation'
 import Link from "next/link";
+import { useAuthContext } from "@context/AuthContext";
 
 import { getAuth } from 'firebase/auth';
 import signUp from "@firebase/auth/signup"
@@ -18,7 +19,9 @@ const auth = getAuth(firebase_app);
 const strengthLabels = ["Invalid", "Medium", "Strong"];
 
 function Page() {
-    const [isLoading, setIsLoading] = React.useState(false);
+    const { user } = useAuthContext();
+
+    const [isLoading, setIsLoading] = React.useState(true);
     const [showModal, setShowModal] = React.useState(false);
     const [modalMessage, setModalMessage] = React.useState('');
 
@@ -96,9 +99,9 @@ function Page() {
             }
             // else successful
             if (result) {
-                //TODO Add code to post a new client
                 const newUserResponse = await axios.post(apiPost, newUser)
                 if (newUserResponse.status == 201) {
+                    newUser.uid = result._tokenResponse.localId
                     const { resultFirebase, errorFirebase } = await addData('users', document, newUser)
                     if (errorFirebase) {
                         setIsLoading(false)
@@ -137,6 +140,13 @@ function Page() {
         setPassword(event.target.value)
     }
 
+    React.useEffect(() => {
+
+        if (user != null) router.push("/");
+        else{
+            setIsLoading(false)
+        }
+      }, [user]);
 
     return (
         <div className="smash">

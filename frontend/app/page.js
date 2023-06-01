@@ -7,11 +7,16 @@ import firebase_app from "@firebase/config";
 import { getFirestore } from "firebase/firestore";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
 import { storage } from "@firebase/config";
-import Navbar from "@components/NavBar";
-import FileUpload from "@components/FileUpload";
 import Image from "next/image";
 
+import Navbar from "@components/NavBar";
+import FileUpload from "@components/FileUpload";
+import Loader from '@components/Loader';
+
+
 export default function Home() {
+  const [isLoading, setIsLoading] = React.useState(true);
+
   const db = getFirestore(firebase_app);
   const { user } = useAuthContext();
   const router = useRouter();
@@ -46,6 +51,7 @@ export default function Home() {
   };
 
   React.useEffect(() => {
+    //console.log(user?.uid)
     const auth = getAuth();
     onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -66,31 +72,38 @@ export default function Home() {
     });
 
     if (user == null) router.push("/signin");
+    else{
+      setIsLoading(false)
+    }
   }, [user]);
 
   return (
     <main className="page-pancake smush">
-      <Navbar />
-      <FileUpload/>
-      <section >
-        <h2>Mis Documentos</h2>
-      <section className="aureole two mt13">
-        {files.map((file, index) => (
-          <div className="document" key={index}>
+      {isLoading ? <Loader /> :
+        <section>
+          <Navbar />
+          <FileUpload />
+          <section >
+            <h2>Mis Documentos</h2>
+            <section className="aureole two mt13">
+              {files.map((file, index) => (
+                <div className="document" key={index}>
 
-            <p className="file-name">{file.name}</p>
-            {getPreviewComponent(file)}
-            <a className="download-button" href={file.url} download={file.name}>
-              Descargar
-            </a>
+                  <p className="file-name">{file.name}</p>
+                  {getPreviewComponent(file)}
+                  <a className="download-button" href={file.url} download={file.name}>
+                    Descargar
+                  </a>
 
-            <a className="validate-button">Validar</a>
-            <a className="delete-button">Eliminar</a>
-          </div>
-        ))}
-        {/* Resto del código... */}
+                  <a className="validate-button">Validar</a>
+                  <a className="delete-button">Eliminar</a>
+                </div>
+              ))}
+              {/* Resto del código... */}
+            </section>
+          </section>
         </section>
-      </section>
+      }
     </main>
   );
 }

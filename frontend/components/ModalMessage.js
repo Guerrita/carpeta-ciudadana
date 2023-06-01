@@ -5,7 +5,7 @@ const ModalMessage = ({ message, onClose }) => {
     <div className="modal ">
       <div className="modal-content smash">
         <p>{message}</p>
-        <button onClick={onClose} className="control">Cerrar</button>
+        <button onClick={onClose} className="button-fill">Cerrar</button>
       </div>
     </div>
   );
