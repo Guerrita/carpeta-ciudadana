@@ -67,21 +67,27 @@ export default function Home() {
   }, [user]);
 
   return (
-    <div className="container">
+    <main className="page-pancake smush">
       <Navbar />
-      {files.map((file, index) => (
-        <div className="document" key={index}>
-          <p className="file-name">{file.name}</p>
-          {getPreviewComponent(file)}
-          <a className="download-button" href={file.url} download={file.name}>
-            Descargar
-          </a>
+      <section >
+        <h2>Mis Archivos</h2>
+      <section className="aureole two mt13">
+        {files.map((file, index) => (
+          <div className="document" key={index}>
 
-          <a className="validate-button">Validar</a>
-          <a className="delete-button">Eliminar</a>
-        </div>
-      ))}
-      {/* Resto del código... */}
-    </div>
+            <p className="file-name">{file.name}</p>
+            {getPreviewComponent(file)}
+            <a className="download-button" href={file.url} download={file.name}>
+              Descargar
+            </a>
+
+            <a className="validate-button">Validar</a>
+            <a className="delete-button">Eliminar</a>
+          </div>
+        ))}
+        {/* Resto del código... */}
+        </section>
+      </section>
+    </main>
   );
 }
