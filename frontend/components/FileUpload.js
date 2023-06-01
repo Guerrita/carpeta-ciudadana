@@ -4,10 +4,24 @@ import { storage } from "@firebase/config";
 import { ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import ModalMessage from '@components/ModalMessage';
+
 
 export default function FileUpload() {
   const [imageUpload, setImageUpload] = useState(null);
   const [userFolder, setUserFolder] = useState("");
+
+  const [showModal, setShowModal] = React.useState(false);
+  const [modalMessage, setModalMessage] = React.useState('');
+
+  const openModal = (message) => {
+    setModalMessage(message);
+    setShowModal(true);
+};
+
+const closeModal = () => {
+    setShowModal(false);
+};
 
   useEffect(() => {
     const auth = getAuth();
@@ -19,13 +33,13 @@ export default function FileUpload() {
   }, []);
 
   const uploadImage = () => {
-    if (imageUpload == null) return alert("Por favor selecciona un archivo");
+    if (imageUpload == null) return openModal("Por favor selecciona un archivo");
     const imageRef = ref(
       storage,
       `files/${userFolder}/${imageUpload.name + uuidv4()}`
     );
     uploadBytes(imageRef, imageUpload).then(() => {
-      alert("Archivo subido");
+      openModal("Archivo subido");
     });
   };
 
@@ -48,6 +62,9 @@ export default function FileUpload() {
 
         <button className="button-fill" onClick={uploadImage}>Subir Documento {imageUpload?.name}</button>
       </div>
+      {showModal && (
+                <ModalMessage message={modalMessage} onClose={closeModal} />
+            )}
     </section>
   );
 }

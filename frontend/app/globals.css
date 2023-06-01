@@ -363,6 +363,7 @@ input#file-upload-button {
   border: 1px solid #888;
   text-align: center;
   height: 50%;
+  min-width: 300px;
 }
 .container {
   display: grid;

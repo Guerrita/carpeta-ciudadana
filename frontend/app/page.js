@@ -9,7 +9,7 @@ import { ref, listAll, getDownloadURL } from "firebase/storage";
 import { storage } from "@firebase/config";
 import Image from "next/image";
 
-import Navbar from "@components/NavBar";
+import Navbar from "@components/Navbar";
 import FileUpload from "@components/FileUpload";
 import Loader from '@components/Loader';
 

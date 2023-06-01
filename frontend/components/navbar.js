@@ -1,12 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
 import logOut from "@firebase/auth/logout"
-import { useAuthContext } from "@context/AuthContext";
 import { useRouter } from "next/navigation";
 import Image from 'next/image';
 
 export default function Navbar() {
-  const { user } = useAuthContext()
   const router = useRouter()
 
   const handleLogOut = async (event) => {
@@ -31,6 +29,7 @@ export default function Navbar() {
         <button
           onClick={handleLogOut}
           className='button-fill'
+          style={{margin: "auto"}}
         >
           Logout
         </button>
