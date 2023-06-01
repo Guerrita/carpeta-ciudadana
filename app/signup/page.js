@@ -49,7 +49,7 @@ function Page() {
 
     const registerUser = async (event) => {
         setIsLoading(true)
-        if (document.length < 10) {
+        if (document.length != 10) {
             setIsLoading(false)
             openModal("Formato de identificacion del Ciudadano no es valido debe ser de 10 digitos!")
             return
