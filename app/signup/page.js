@@ -93,7 +93,7 @@ function Page() {
                         openModal('La contraseña no es lo suficientemente segura. Debe tener mínimo 6 caracteres. Agregue caracteres adicionales, incluidos caracteres especiales y números.');
                         return;
                     default:
-                        console.log(error.message);
+                        openModal(error.message);
                         return;
                 }
             }

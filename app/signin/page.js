@@ -43,7 +43,7 @@ function Page() {
 
         if (result) {
             // else successful
-            console.log(result)
+            //console.log(result)
             return router.push("/")
         }
     }

@@ -482,3 +482,8 @@ input#file-upload-button {
   margin: 0 auto;
 }
 
+@media only screen and (max-width: 767px) {
+  .aureole:not(.fixed) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}

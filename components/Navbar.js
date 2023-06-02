@@ -14,7 +14,7 @@ export default function Navbar() {
       return console.log(error)
     }
     // else successful
-    console.log(result)
+    //console.log(result)
     return router.push("/signin")
   }
   return (
